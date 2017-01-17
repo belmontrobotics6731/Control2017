@@ -25,9 +25,9 @@ public class RobotMap {
 	
 	// Controller ports
 	//public static int XBOX_PORT = 1;
-	public static int LOGITECH_PORT = 1;
-	public static int JOYSTICK_FB_PORT = 0;
-	public static int JOYSTICK_LR_PORT = 1;
+	public static int LOGITECH_PORT = 0;
+	public static int JOYSTICK_FB_PORT = 1;
+	public static int JOYSTICK_LR_PORT = 2;
 	
 	// Contoller constants
 	public static double CHEESY_ROTATION_SENS = 1.0;
