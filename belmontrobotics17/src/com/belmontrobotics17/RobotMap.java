@@ -8,28 +8,26 @@ package com.belmontrobotics17;
  */
 public class RobotMap {
 	
-	// PWM ports
-	public static int LEFT_DRIVE_PORT = 1;
-	public static int RIGHT_DRIVE_PORT = 2;
+	/***  PWM ports  ***/
+	
+	// Left drive ports
+	public static int DRIVE0_PORT = 0;
+	public static int DRIVE1_PORT = 1;
+	
+	// Right drive ports
+	public static int DRIVE2_PORT = 2;
+	public static int DRIVE3_PORT = 3;
+	
 	
 	// DIGITAL ports
-	public static int ENCODER_PORT_1 = 5;
-	public static int ENCODER_PORT_2 = 6;
-	
-	// Drive PID constants
-	public static double DRIVE_PID_P = 1.0;
-	public static double DRIVE_PID_I = 0.0;
-	public static double DRIVE_PID_D = 0.0;
-	
-	public static double DRIVE_PID_TOLERANCE = 0.5;
+	public static int LEFT_ENCODER_PORT1 = 3;
+	public static int LEFT_ENCODER_PORT2 = 4;
+	public static int RIGHT_ENCODER_PORT1 = 5;
+	public static int RIGHT_ENCODER_PORT2 = 6;
 	
 	// Controller ports
-	//public static int XBOX_PORT = 1;
 	public static int LOGITECH_PORT = 0;
 	public static int JOYSTICK_FB_PORT = 1;
 	public static int JOYSTICK_LR_PORT = 2;
-	
-	// Controller constants
-	public static double CHEESY_ROTATION_SENS = 1.0;
-	public static double CHEESY_ROTATION_SENS_FAST = 2.0;
+	public static int JOYSTICK_FASTTURN_BUTTON = 0;
 }

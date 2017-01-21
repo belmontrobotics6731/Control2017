@@ -2,8 +2,9 @@ package com.belmontrobotics17.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 
+
 import com.belmontrobotics17.Robot;
-import com.belmontrobotics17.RobotMap;
+import com.belmontrobotics17.RobotVars;
 
 /**
  *
@@ -22,7 +23,7 @@ public class DriveDistanceCmd extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	
-    	Robot.drivetrain.runPID(this.distance, RobotMap.DRIVE_PID_TOLERANCE);
+    	//Robot.drivetrain.driveDistancePID(this.distance, RobotVars.DRIVE_PID_TOLERANCE);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -31,7 +32,8 @@ public class DriveDistanceCmd extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.drivetrain.driveDistancePID.onTarget();
+        //return Robot.drivetrain.driveDistancePID.onTarget();
+    	return false;
     }
 
     // Called once after isFinished returns true

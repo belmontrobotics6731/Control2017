@@ -21,7 +21,7 @@ public class DriveWithJoystickCmd extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.drivetrain.driveCheesy(Robot.oi.getJoystick(RobotMap.JOYSTICK_FB_PORT), Robot.oi.getJoystick(RobotMap.JOYSTICK_LR_PORT), false);
+    	Robot.drivetrain.driveCheesy(Robot.oi.getLogitechJoystick(RobotMap.JOYSTICK_FB_PORT), Robot.oi.getLogitechJoystick(RobotMap.JOYSTICK_LR_PORT), Robot.oi.getLogitechButton(RobotMap.JOYSTICK_FASTTURN_BUTTON));
     }
 
     // Make this return true when this Command no longer needs to run execute()

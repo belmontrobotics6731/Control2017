@@ -2,7 +2,8 @@ package com.belmontrobotics17.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-import edu.wpi.first.wpilibj.Talon;
+
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PIDOutput;
 
 import com.belmontrobotics17.RobotMap;
+import com.belmontrobotics17.RobotVars;
 import com.belmontrobotics17.commands.drivetrain.DriveWithJoystickCmd;
 
 /**
@@ -17,24 +19,45 @@ import com.belmontrobotics17.commands.drivetrain.DriveWithJoystickCmd;
  */
 public class Drivetrain extends Subsystem {
 
-	private Talon leftDrive = new Talon(RobotMap.LEFT_DRIVE_PORT);
-	private Talon rightDrive = new Talon(RobotMap.RIGHT_DRIVE_PORT);
+	// Left drive motors
+	private Spark drive_motor0 = new Spark(RobotMap.DRIVE0_PORT);
+	private Spark drive_motor1 = new Spark(RobotMap.DRIVE1_PORT);
 	
-	private Encoder driveEncoder = new Encoder(RobotMap.ENCODER_PORT_1, RobotMap.ENCODER_PORT_2);
+	// Right drive motors		
+	private Spark drive_motor2 = new Spark(RobotMap.DRIVE2_PORT);
+	private Spark drive_motor3 = new Spark(RobotMap.DRIVE3_PORT);
 	
-	public PIDController driveDistancePID = new PIDController(RobotMap.DRIVE_PID_P, RobotMap.DRIVE_PID_I, RobotMap.DRIVE_PID_D, new DriveDistanceSource(), new DriveDistanceOutput());
+	private Encoder leftDriveEncoder = new Encoder(RobotMap.LEFT_ENCODER_PORT1, RobotMap.LEFT_ENCODER_PORT2);
+	private Encoder rightDriveEncoder = new Encoder(RobotMap.RIGHT_ENCODER_PORT1, RobotMap.RIGHT_ENCODER_PORT2);
 	
-	public void runPID(double setPoint, double absoluteTolerance)
+	//public PIDController driveDistancePID = new PIDController(RobotVars.DRIVE_PID_P, RobotVars.DRIVE_PID_I, RobotVars.DRIVE_PID_D, new DriveDistanceSource(), new DriveDistanceOutput());
+	
+	public void driveDistancePID(double setPoint, double absoluteTolerance)
 	{
-		this.driveDistancePID.setSetpoint(setPoint);
+		this.leftDriveEncoder.reset();
+		this.rightDriveEncoder.reset();
+		
+		/*this.driveDistancePID.setSetpoint(setPoint);
 		this.driveDistancePID.setAbsoluteTolerance(absoluteTolerance);
-		this.driveDistancePID.enable();
+		this.driveDistancePID.enable();*/
 	}
 	
 	public void drive(double left, double right)
 	{
-		this.leftDrive.set(left);
-		this.rightDrive.set(right);
+		this.drive_motor0.set(left);
+		this.drive_motor1.set(left);
+		
+		this.drive_motor2.set(right);
+		this.drive_motor3.set(right);
+	}
+	
+	public void drivePID(double val)
+	{
+		this.drive_motor0.pidWrite(val);
+		this.drive_motor1.pidWrite(val);
+		
+		this.drive_motor2.pidWrite(val);
+		this.drive_motor3.pidWrite(val);
 	}
 	
 	public void driveCheesy(double throttle, double rotation, boolean fasterTurn)
@@ -42,8 +65,12 @@ public class Drivetrain extends Subsystem {
 		double lDrive = throttle;
 		double rDrive = throttle;
 		
-		double fturnConstant = fasterTurn ? 1.0 : 0.0;
-		double sens = fasterTurn ? RobotMap.CHEESY_ROTATION_SENS_FAST : RobotMap.CHEESY_ROTATION_SENS;
+		double fturnConstant = 0.0;
+		double sens = RobotVars.CHEESY_ROTATION_SENS;
+		if(fasterTurn) {
+			fturnConstant = 1.0;
+			sens = RobotVars.CHEESY_ROTATION_SENS_FAST;
+		}
 		
 		lDrive += rotation * sens;
 		rDrive -= rotation * sens;
@@ -65,7 +92,7 @@ public class Drivetrain extends Subsystem {
 			rDrive = -1.0;
 		}
 		
-		this.drive(lDrive, rDrive);
+		this.drive(RobotVars.CHEESY_CONTROL_SENS * lDrive, RobotVars.CHEESY_CONTROL_SENS * rDrive);
 	}
 	
 	public void stop()
@@ -82,7 +109,7 @@ public class Drivetrain extends Subsystem {
     	setDefaultCommand(new DriveWithJoystickCmd());
     }
     
-    private class DriveDistanceSource implements PIDSource {
+    /*private class DriveDistanceSource implements PIDSource {
     	
     	@Override
     	public PIDSourceType getPIDSourceType()
@@ -96,7 +123,7 @@ public class Drivetrain extends Subsystem {
     	@Override
     	public double pidGet()
     	{
-    		return driveEncoder.getDistance();
+    		return (leftDriveEncoder.getDistance() + rightDriveEncoder.getDistance()) / 2.0;
     	}
     }
     
@@ -104,9 +131,8 @@ public class Drivetrain extends Subsystem {
     	
     	@Override
     	public void pidWrite(double output) {
-    		leftDrive.pidWrite(output);
-    		rightDrive.pidWrite(-output);
+    		drivePID(output);
     	}
-    }
+    }*/
 }
 

@@ -11,8 +11,13 @@ public class OI {
 	
 	private Joystick logitechJoystick = new Joystick(RobotMap.LOGITECH_PORT);
 	
-	public double getJoystick(int axis)
+	public double getLogitechJoystick(int axis)
 	{
 		return this.logitechJoystick.getRawAxis(axis);
+	}
+	
+	public boolean getLogitechButton(int button)
+	{
+		return this.logitechJoystick.getRawButton(button);
 	}
 }
