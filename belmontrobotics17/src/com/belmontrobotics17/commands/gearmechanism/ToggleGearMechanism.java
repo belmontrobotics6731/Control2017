@@ -1,4 +1,4 @@
-package com.belmontrobotics17.commands;
+package com.belmontrobotics17.commands.gearmechanism;
 
 import com.belmontrobotics17.Robot;
 
@@ -7,15 +7,16 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class GearControl extends Command {
+public class ToggleGearMechanism extends Command {
 
-    public GearControl() {
+    public ToggleGearMechanism() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.gearMechanism);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.gearMechanism.toggleSolenoids();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -24,7 +25,7 @@ public class GearControl extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true

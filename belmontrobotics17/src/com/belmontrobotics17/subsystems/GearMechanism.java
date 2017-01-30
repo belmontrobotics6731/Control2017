@@ -1,6 +1,6 @@
 package com.belmontrobotics17.subsystems;
 
-import com.belmontrobotics17.commands.GearControl;
+import com.belmontrobotics17.commands.gearmechanism.GearControl;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -18,6 +18,11 @@ public class GearMechanism extends Subsystem {
 	private boolean solenoidOpen = false;
 	
 	public GearMechanism()
+	{
+		this.stopSolenoids();
+	}
+	
+	public void stopSolenoids()
 	{
 		this.solenoid1.set(DoubleSolenoid.Value.kOff);
 		this.solenoid2.set(DoubleSolenoid.Value.kOff);

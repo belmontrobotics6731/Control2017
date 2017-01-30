@@ -3,7 +3,7 @@ package com.belmontrobotics17;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
-import com.belmontrobotics17.commands.ToggleGearMechanism;
+import com.belmontrobotics17.commands.gearmechanism.ToggleGearMechanism;
 
 import edu.wpi.first.wpilibj.Joystick;
 
