@@ -47,8 +47,8 @@ public class Drivetrain extends Subsystem {
 		this.drive_motor0.set(left);
 		this.drive_motor1.set(left);
 		
-		this.drive_motor2.set(right);
-		this.drive_motor3.set(right);
+		this.drive_motor2.set(-right);
+		this.drive_motor3.set(-right);
 	}
 	
 	public void drivePID(double val)
@@ -56,14 +56,14 @@ public class Drivetrain extends Subsystem {
 		this.drive_motor0.pidWrite(val);
 		this.drive_motor1.pidWrite(val);
 		
-		this.drive_motor2.pidWrite(val);
-		this.drive_motor3.pidWrite(val);
+		this.drive_motor2.pidWrite(-val);
+		this.drive_motor3.pidWrite(-val);
 	}
 	
-	public void driveCheesy(double throttle, double rotation, boolean fasterTurn)
+	public void driveCheesy(double throttle, double rotation, boolean fasterTurn, double insens)
 	{
-		double lDrive = throttle;
-		double rDrive = throttle;
+		double lDrive = throttle * RobotVars.CHEESY_THROTTLE_SENS;
+		double rDrive = throttle * RobotVars.CHEESY_THROTTLE_SENS;
 		
 		double fturnConstant = 0.0;
 		double sens = RobotVars.CHEESY_ROTATION_SENS;
@@ -92,7 +92,8 @@ public class Drivetrain extends Subsystem {
 			rDrive = -1.0;
 		}
 		
-		this.drive(RobotVars.CHEESY_CONTROL_SENS * lDrive, RobotVars.CHEESY_CONTROL_SENS * rDrive);
+		//this.drive(insens,  insens);
+		this.drive(insens * lDrive, insens * rDrive);
 	}
 	
 	public void stop()

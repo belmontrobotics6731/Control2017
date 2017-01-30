@@ -11,6 +11,6 @@ public class RobotVars {
 
 	// Controller constants
 	public static double CHEESY_ROTATION_SENS = 1.0;
-	public static double CHEESY_ROTATION_SENS_FAST = 2.0;
-	public static double CHEESY_CONTROL_SENS = 1.0;
+	public static double CHEESY_ROTATION_SENS_FAST = 1.5;
+	public static double CHEESY_THROTTLE_SENS = 1.0;
 }

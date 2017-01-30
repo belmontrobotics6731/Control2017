@@ -1,6 +1,7 @@
 package com.belmontrobotics17.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.belmontrobotics17.RobotMap;
 import com.belmontrobotics17.Robot;
@@ -21,7 +22,18 @@ public class DriveWithJoystickCmd extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.drivetrain.driveCheesy(Robot.oi.getLogitechJoystick(RobotMap.JOYSTICK_FB_PORT), Robot.oi.getLogitechJoystick(RobotMap.JOYSTICK_LR_PORT), Robot.oi.getLogitechButton(RobotMap.JOYSTICK_FASTTURN_BUTTON));
+    	double fb = Robot.oi.getLogitechJoystick(RobotMap.JOYSTICK_FB_PORT);
+    	double lr = Robot.oi.getLogitechJoystick(RobotMap.JOYSTICK_LR_PORT);
+    	double sens = (1.0 - Robot.oi.getLogitechJoystick(RobotMap.JOYSTICK_SENS_PORT)) / 2.0;
+    	boolean fast = Robot.oi.getLogitechButton(RobotMap.JOYSTICK_FASTTURN_BUTTON);
+    	
+    	fb = Math.pow(Math.abs(fb), 1) * Math.signum(fb);
+    	lr = Math.pow(Math.abs(lr),  1) * Math.signum(lr);
+    	
+    	//SmartDashboard.putNumber("Forward-Back", fb);
+    	//SmartDashboard.putNumber("Left-Right", lr);
+    	
+    	Robot.drivetrain.driveCheesy(fb, lr, fast, sens);
     }
 
     // Make this return true when this Command no longer needs to run execute()

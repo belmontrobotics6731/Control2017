@@ -29,5 +29,7 @@ public class RobotMap {
 	public static int LOGITECH_PORT = 0;
 	public static int JOYSTICK_FB_PORT = 1;
 	public static int JOYSTICK_LR_PORT = 2;
-	public static int JOYSTICK_FASTTURN_BUTTON = 0;
+	public static int JOYSTICK_SENS_PORT = 3;
+	public static int JOYSTICK_FASTTURN_BUTTON = 2;
+	public static int JOYSTICK_GEAR_TOGGLE_BUTTON = 3;
 }

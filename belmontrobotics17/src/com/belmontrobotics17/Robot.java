@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.belmontrobotics17.subsystems.Drivetrain;
+import com.belmontrobotics17.subsystems.GearMechanism;
 import com.belmontrobotics17.commands.Auto;
 
 /**
@@ -22,6 +23,7 @@ import com.belmontrobotics17.commands.Auto;
 public class Robot extends IterativeRobot {
 
 	public static Drivetrain drivetrain = new Drivetrain();
+	public static GearMechanism gearMechanism = new GearMechanism();
 	public static OI oi;
 
 	Command autonomousCommand;
