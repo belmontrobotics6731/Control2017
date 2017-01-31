@@ -12,6 +12,7 @@ public class GearControl extends Command {
     public GearControl() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.gearMechanism);
+    
     }
 
     // Called just before this Command runs the first time
