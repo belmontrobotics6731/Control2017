@@ -18,7 +18,7 @@ public class OI {
 	
 	public OI()
 	{
-		this.gearToggleButton.whenReleased(new ToggleGearMechanism());
+		this.gearToggleButton.whenReleased(new ToggleGearMechanism(400));
 	}
 	
 	public double getLogitechJoystick(int axis)

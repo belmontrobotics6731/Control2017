@@ -98,7 +98,7 @@ public class Drivetrain extends Subsystem {
 	
 	public void stop()
 	{
-		this.drive(0, 0);
+		this.drive(0.0, 0.0);
 	}
 	
     // Put methods for controlling this subsystem
