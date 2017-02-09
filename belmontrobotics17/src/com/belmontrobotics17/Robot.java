@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.belmontrobotics17.subsystems.Drivetrain;
 import com.belmontrobotics17.subsystems.GearMechanism;
+import com.belmontrobotics17.subsystems.RopeClimbing;
 import com.belmontrobotics17.commands.Auto;
 
 /**
@@ -24,6 +25,8 @@ public class Robot extends IterativeRobot {
 
 	public static Drivetrain drivetrain = new Drivetrain();
 	public static GearMechanism gearMechanism = new GearMechanism();
+	public static RopeClimbing ropeClimbing = new RopeClimbing();
+	
 	public static OI oi;
 
 	Command autonomousCommand;

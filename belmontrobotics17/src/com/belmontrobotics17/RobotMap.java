@@ -13,10 +13,11 @@ public class RobotMap {
 	// Left drive ports
 	public static int DRIVE0_PORT = 0;
 	public static int DRIVE1_PORT = 1;
-	
 	// Right drive ports
 	public static int DRIVE2_PORT = 2;
 	public static int DRIVE3_PORT = 3;
+	
+	public static int LIFT_MOTOR_PORT = 4;
 	
 	
 	// DIGITAL ports
@@ -32,4 +33,5 @@ public class RobotMap {
 	public static int JOYSTICK_SENS_PORT = 3;
 	public static int JOYSTICK_FASTTURN_BUTTON = 2;
 	public static int JOYSTICK_GEAR_TOGGLE_BUTTON = 3;
+	public static int JOYSTICK_NOTURN_BUTTON = 1;
 }

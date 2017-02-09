@@ -30,6 +30,9 @@ public class DriveWithJoystickCmd extends Command {
     	fb = Math.pow(Math.abs(fb), 1) * Math.signum(fb);
     	lr = Math.pow(Math.abs(lr),  1) * Math.signum(lr);
     	
+    	if(Robot.oi.getLogitechButton(RobotMap.JOYSTICK_NOTURN_BUTTON))
+    		lr = 0.0;
+    	
     	//SmartDashboard.putNumber("Forward-Back", fb);
     	//SmartDashboard.putNumber("Left-Right", lr);
     	
