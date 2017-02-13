@@ -1,6 +1,7 @@
 package com.belmontrobotics17.commands.ropeclimbing;
 
 import com.belmontrobotics17.Robot;
+import com.belmontrobotics17.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -22,6 +23,9 @@ public class RopeControl extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	double d = Robot.oi.getLogitechJoystick(RobotMap.JOYSTICK_LIFT_PORT);
+    	
+    	Robot.ropeClimbing.moveLift(d);
     }
 
     // Make this return true when this Command no longer needs to run execute()

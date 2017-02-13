@@ -20,5 +20,10 @@ public class RopeClimbing extends Subsystem {
         // Set the default command for a subsystem here.
         setDefaultCommand(new RopeControl());
     }
+    
+    public void moveLift(double v)
+    {
+    	this.lift_motor.set(v);
+    }
 }
 

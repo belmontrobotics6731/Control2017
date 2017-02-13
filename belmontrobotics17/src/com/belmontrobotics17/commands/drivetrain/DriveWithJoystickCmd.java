@@ -33,10 +33,13 @@ public class DriveWithJoystickCmd extends Command {
     	if(Robot.oi.getLogitechButton(RobotMap.JOYSTICK_NOTURN_BUTTON))
     		lr = 0.0;
     	
-    	//SmartDashboard.putNumber("Forward-Back", fb);
-    	//SmartDashboard.putNumber("Left-Right", lr);
+    	SmartDashboard.putNumber("Throttle", fb);
+    	SmartDashboard.putNumber("Turn", lr);
     	
     	Robot.drivetrain.driveCheesy(fb, lr, fast, sens);
+    	
+    	//Robot.ntable.putNumber("Throttle", fb);
+    	//Robot.ntable.putNumber("Turn", lr);
     }
 
     // Make this return true when this Command no longer needs to run execute()
