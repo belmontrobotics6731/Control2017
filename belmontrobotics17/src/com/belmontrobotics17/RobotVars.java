@@ -13,4 +13,6 @@ public class RobotVars {
 	public static double CHEESY_ROTATION_SENS = 1.0;
 	public static double CHEESY_ROTATION_SENS_FAST = 1.5;
 	public static double CHEESY_THROTTLE_SENS = 1.0;
+	
+	public static double JOYSTICK_LOWER_THRESHOLD = 0.01;
 }
