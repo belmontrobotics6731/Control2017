@@ -15,6 +15,5 @@ public class RobotConstants {
 	public static double CHEESY_THROTTLE_SENS = 1.0;
 	
 	// Dimensions for calculations
-	public static double AXIS_WIDTH = 10.0;
-	public static double WHEEL_WIDTH = 1.0;
+	public static double TURN_DISTANCE = 10.0;
 }
