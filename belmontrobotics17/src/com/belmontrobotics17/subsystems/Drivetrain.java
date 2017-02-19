@@ -1,8 +1,7 @@
 package com.belmontrobotics17.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
@@ -11,7 +10,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PIDOutput;
 
 import com.belmontrobotics17.RobotMap;
-import com.belmontrobotics17.RobotVars;
+import com.belmontrobotics17.RobotConstants;
 import com.belmontrobotics17.commands.drivetrain.DriveWithJoystickCmd;
 
 /**
@@ -28,18 +27,25 @@ public class Drivetrain extends Subsystem {
 	private Spark drive_motor3 = new Spark(RobotMap.DRIVE3_PORT);
 	
 	private Encoder leftDriveEncoder = new Encoder(RobotMap.LEFT_ENCODER_PORT1, RobotMap.LEFT_ENCODER_PORT2);
-	private Encoder rightDriveEncoder = new Encoder(RobotMap.RIGHT_ENCODER_PORT1, RobotMap.RIGHT_ENCODER_PORT2);
+	//private Encoder rightDriveEncoder = new Encoder(RobotMap.RIGHT_ENCODER_PORT1, RobotMap.RIGHT_ENCODER_PORT2);
 	
-	//public PIDController driveDistancePID = new PIDController(RobotVars.DRIVE_PID_P, RobotVars.DRIVE_PID_I, RobotVars.DRIVE_PID_D, new DriveDistanceSource(), new DriveDistanceOutput());
+	public PIDController driveDistancePID = new PIDController(RobotConstants.DRIVE_PID_P, RobotConstants.DRIVE_PID_I, RobotConstants.DRIVE_PID_D, new DriveDistanceSource(), new DriveDistanceOutput());
+	
+	// debug
+	public void printEncodersToNetworkTables()
+	{
+		SmartDashboard.putNumber("Left encoder", this.leftDriveEncoder.getDistance());
+		//SmartDashboard.putNumber("Right encoder", this.rightDriveEncoder.getDistance());
+	}
 	
 	public void driveDistancePID(double setPoint, double absoluteTolerance)
 	{
 		this.leftDriveEncoder.reset();
-		this.rightDriveEncoder.reset();
+		//this.rightDriveEncoder.reset();
 		
-		/*this.driveDistancePID.setSetpoint(setPoint);
+		this.driveDistancePID.setSetpoint(setPoint);
 		this.driveDistancePID.setAbsoluteTolerance(absoluteTolerance);
-		this.driveDistancePID.enable();*/
+		this.driveDistancePID.enable();
 	}
 	
 	public void drive(double left, double right)
@@ -51,25 +57,25 @@ public class Drivetrain extends Subsystem {
 		this.drive_motor3.set(-right);
 	}
 	
-	public void drivePID(double val)
+	public void drivePID(double left, double right)
 	{
-		this.drive_motor0.pidWrite(val);
-		this.drive_motor1.pidWrite(val);
+		this.drive_motor0.pidWrite(left);
+		this.drive_motor1.pidWrite(left);
 		
-		this.drive_motor2.pidWrite(-val);
-		this.drive_motor3.pidWrite(-val);
+		this.drive_motor2.pidWrite(-right);
+		this.drive_motor3.pidWrite(-right);
 	}
 	
 	public void driveCheesy(double throttle, double rotation, boolean fasterTurn, double insens)
 	{
-		double lDrive = throttle * RobotVars.CHEESY_THROTTLE_SENS;
-		double rDrive = throttle * RobotVars.CHEESY_THROTTLE_SENS;
+		double lDrive = throttle * RobotConstants.CHEESY_THROTTLE_SENS;
+		double rDrive = throttle * RobotConstants.CHEESY_THROTTLE_SENS;
 		
 		double fturnConstant = 0.0;
-		double sens = RobotVars.CHEESY_ROTATION_SENS;
+		double sens = RobotConstants.CHEESY_ROTATION_SENS;
 		if(fasterTurn) {
 			fturnConstant = 1.0;
-			sens = RobotVars.CHEESY_ROTATION_SENS_FAST;
+			sens = RobotConstants.CHEESY_ROTATION_SENS_FAST;
 		}
 		
 		lDrive += rotation * sens;
@@ -110,7 +116,7 @@ public class Drivetrain extends Subsystem {
     	setDefaultCommand(new DriveWithJoystickCmd());
     }
     
-    /*private class DriveDistanceSource implements PIDSource {
+    private class DriveDistanceSource implements PIDSource {
     	
     	@Override
     	public PIDSourceType getPIDSourceType()
@@ -124,7 +130,7 @@ public class Drivetrain extends Subsystem {
     	@Override
     	public double pidGet()
     	{
-    		return (leftDriveEncoder.getDistance() + rightDriveEncoder.getDistance()) / 2.0;
+    		return leftDriveEncoder.getDistance();
     	}
     }
     
@@ -132,8 +138,34 @@ public class Drivetrain extends Subsystem {
     	
     	@Override
     	public void pidWrite(double output) {
-    		drivePID(output);
+    		drivePID(-output, -output);
     	}
-    }*/
+    }
+    
+    private class TurnAngleSource implements PIDSource {
+    	
+    	@Override
+    	public PIDSourceType getPIDSourceType()
+    	{
+    		return PIDSourceType.kDisplacement;
+    	}
+    	
+    	@Override
+    	public void setPIDSourceType(PIDSourceType pidSource) { }
+    	
+    	@Override
+    	public double pidGet()
+    	{
+    		return leftDriveEncoder.getDistance();
+    	}
+    }
+    
+    private class TurnAngleOutput implements PIDOutput {
+    	
+    	@Override
+    	public void pidWrite(double output) {
+    		drivePID(-output, -output);
+    	}
+    }
 }
 

@@ -1,19 +1,31 @@
 
 package com.belmontrobotics17;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.cscore.UsbCamera;
 
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.belmontrobotics17.subsystems.Drivetrain;
 import com.belmontrobotics17.subsystems.GearMechanism;
 import com.belmontrobotics17.subsystems.RopeClimbing;
+import com.belmontrobotics17.subsystems.Vision;
+import com.belmontrobotics17.vision.CameraThread;
 import com.belmontrobotics17.commands.Auto;
+
+/*import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;*/
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,8 +39,10 @@ public class Robot extends IterativeRobot {
 	public static Drivetrain drivetrain = new Drivetrain();
 	public static GearMechanism gearMechanism = new GearMechanism();
 	public static RopeClimbing ropeClimbing = new RopeClimbing();
+	public static Vision vision = new Vision();
 	
-	public static NetworkTable ntable;
+	//public static NetworkTable dashtable;
+	//public static NetworkTable ntable;
 	
 	public static OI oi;
 
@@ -42,10 +56,16 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		//
+
+		vision.initCameraStream(1280, 720);
+		
 		chooser.addDefault("Default Auto", new Auto());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
+		
+		RobotPrefs.init();
+		
+		//dashtable = NetworkTable.getTable("SmartDashboard");
 	}
 
 	/**

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.belmontrobotics17.RobotMap;
-import com.belmontrobotics17.RobotVars;
+import com.belmontrobotics17.RobotPrefs;
 import com.belmontrobotics17.Robot;
 
 /**
@@ -38,6 +38,8 @@ public class DriveWithJoystickCmd extends Command {
     	SmartDashboard.putNumber("Turn", lr);
     	
     	Robot.drivetrain.driveCheesy(fb, lr, fast, sens);
+    	
+    	Robot.drivetrain.printEncodersToNetworkTables();
     	
     	//Robot.ntable.putNumber("Throttle", fb);
     	//Robot.ntable.putNumber("Turn", lr);

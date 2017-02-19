@@ -27,6 +27,6 @@ public class Auto extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	//addSequential(new DriveDistanceCmd(20.0));
+    	addSequential(new DriveDistanceCmd(1000.0));
     }
 }

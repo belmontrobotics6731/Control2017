@@ -24,11 +24,13 @@ public class OI {
 	public double getLogitechJoystick(int axis)
 	{
 		double r = this.logitechJoystick.getRawAxis(axis);
-	
-		if(r < RobotVars.JOYSTICK_LOWER_THRESHOLD && r > -RobotVars.JOYSTICK_LOWER_THRESHOLD)
+		
+		double thresh = RobotPrefs.JOYSTICK_THRESHOLD;
+		
+		if(r < thresh && r > -thresh)
     		r = 0.0;
 		
-		return r;
+		return (r - Math.signum(r) * thresh) / (1.0 - thresh);
 	}
 	
 	public boolean getLogitechButton(int button)

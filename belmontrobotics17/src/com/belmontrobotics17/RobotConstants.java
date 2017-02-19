@@ -1,11 +1,11 @@
 package com.belmontrobotics17;
 
-public class RobotVars {
+public class RobotConstants {
 
 	// Drive PID constants
 	public static double DRIVE_PID_P = 1.0;
-	public static double DRIVE_PID_I = 0.0;
-	public static double DRIVE_PID_D = 0.0;
+	public static double DRIVE_PID_I = 1.0;
+	public static double DRIVE_PID_D = -1.0;
 	
 	public static double DRIVE_PID_TOLERANCE = 0.5;
 
@@ -14,5 +14,7 @@ public class RobotVars {
 	public static double CHEESY_ROTATION_SENS_FAST = 1.5;
 	public static double CHEESY_THROTTLE_SENS = 1.0;
 	
-	public static double JOYSTICK_LOWER_THRESHOLD = 0.01;
+	// Dimensions for calculations
+	public static double AXIS_WIDTH = 10.0;
+	public static double WHEEL_WIDTH = 1.0;
 }

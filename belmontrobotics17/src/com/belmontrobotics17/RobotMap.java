@@ -19,12 +19,13 @@ public class RobotMap {
 	
 	public static int LIFT_MOTOR_PORT = 4;
 	
+	public static int LIGHTS_PORT = 5;
 	
 	// DIGITAL ports
-	public static int LEFT_ENCODER_PORT1 = 3;
-	public static int LEFT_ENCODER_PORT2 = 4;
-	public static int RIGHT_ENCODER_PORT1 = 5;
-	public static int RIGHT_ENCODER_PORT2 = 6;
+	public static int LEFT_ENCODER_PORT1 = 0;
+	public static int LEFT_ENCODER_PORT2 = 1;
+	public static int RIGHT_ENCODER_PORT1 = 2;
+	public static int RIGHT_ENCODER_PORT2 = 3;
 	
 	// Controller ports
 	public static int LOGITECH_PORT = 0;
