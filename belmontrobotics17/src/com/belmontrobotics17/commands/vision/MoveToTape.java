@@ -1,6 +1,7 @@
 package com.belmontrobotics17.commands.vision;
 
 import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 
 import com.belmontrobotics17.Robot;
 
@@ -26,7 +27,7 @@ public class MoveToTape extends Command {
     	Robot.vision.lights.en();
     	
     	Mat frame = Robot.vision.getLastFrame();
-    	
+    	Imgcodecs.imwrite("img.jpg", frame);
     	// Locate tape
     }
 

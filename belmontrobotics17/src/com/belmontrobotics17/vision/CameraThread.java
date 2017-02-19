@@ -1,7 +1,14 @@
 package com.belmontrobotics17.vision;
 
-import org.opencv.core.Mat;
+import java.io.File;
 
+import org.opencv.core.Core;
+import org.opencv.core.CvException;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfFloat4;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.LineSegmentDetector;
 
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
@@ -34,12 +41,43 @@ public class CameraThread extends Thread {
 		CvSource outputStream = server.putVideo("Vision", this.width, this.height);
 		
 		Mat frame = new Mat();
+		//Mat outframe = new Mat();
 		
 		while(!Thread.interrupted())
 		{
 			sink.grabFrame(frame);
-			outputStream.putFrame(frame);
+
+		        try {
+		            LineSegmentDetector ls = Imgproc.createLineSegmentDetector();
+		            Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
+		     
+		            MatOfFloat4 lines = new MatOfFloat4();
+
+		            ls.detect(frame, lines);
+
+
+		            Mat lineImage = null;
+		            frame.copyTo(lineImage);
+		            
+
+		            ls.drawSegments(lineImage, lines);
+
+
+		     //       outframe = cv2.lfdfjh(frame);
+					
+					outputStream.putFrame(lineImage);
+
+		        } catch (CvException e) {
+		         e.printStackTrace();
+		        }
+
+		    }
+			
+			
+			
+			
 			this.lastFrame = frame;
 		}
 	}
-}
+
+	
