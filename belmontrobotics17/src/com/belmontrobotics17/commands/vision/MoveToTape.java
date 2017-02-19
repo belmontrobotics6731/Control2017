@@ -1,5 +1,7 @@
 package com.belmontrobotics17.commands.vision;
 
+import org.opencv.core.Mat;
+
 import com.belmontrobotics17.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
