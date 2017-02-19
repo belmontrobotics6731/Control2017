@@ -29,7 +29,11 @@ public class Drivetrain extends Subsystem {
 	private Encoder leftDriveEncoder = new Encoder(RobotMap.LEFT_ENCODER_PORT1, RobotMap.LEFT_ENCODER_PORT2);
 	//private Encoder rightDriveEncoder = new Encoder(RobotMap.RIGHT_ENCODER_PORT1, RobotMap.RIGHT_ENCODER_PORT2);
 	
+	// In meters
 	public PIDController driveDistancePID = new PIDController(RobotConstants.DRIVE_PID_P, RobotConstants.DRIVE_PID_I, RobotConstants.DRIVE_PID_D, new DriveDistanceSource(), new DriveDistanceOutput());
+	
+	// In radians
+	public PIDController turnAnglePID = new PIDController(RobotConstants.TURN_PID_P, RobotConstants.TURN_PID_I, RobotConstants.TURN_PID_D, new TurnAngleSource(), new TurnAngleOutput());
 	
 	// debug
 	public void printEncodersToNetworkTables()
@@ -46,6 +50,16 @@ public class Drivetrain extends Subsystem {
 		this.driveDistancePID.setSetpoint(setPoint);
 		this.driveDistancePID.setAbsoluteTolerance(absoluteTolerance);
 		this.driveDistancePID.enable();
+	}
+	
+	public void turnAnglePID(double setPoint, double absoluteTolerance)
+	{
+		this.leftDriveEncoder.reset();
+		//this.rightEncoder.reset();
+		
+		this.turnAnglePID.setSetpoint(setPoint);
+		this.turnAnglePID.setAbsoluteTolerance(absoluteTolerance);
+		this.turnAnglePID.enable();
 	}
 	
 	public void drive(double left, double right)
@@ -156,7 +170,8 @@ public class Drivetrain extends Subsystem {
     	@Override
     	public double pidGet()
     	{
-    		return leftDriveEncoder.getDistance();
+    		// Returns angle in radians that has been turned through
+    		return (leftDriveEncoder.getDistance() / RobotConstants.WHEEL_RADIUS);
     	}
     }
     
@@ -164,7 +179,7 @@ public class Drivetrain extends Subsystem {
     	
     	@Override
     	public void pidWrite(double output) {
-    		drivePID(-output, -output);
+    		drivePID(-output, output);
     	}
     }
 }
