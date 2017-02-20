@@ -40,27 +40,26 @@ public class MoveToTape extends Command {
     	// area left and right
     	float al = 0, ar = 0;
     	
-    	
-    	
     	if (back)
     	{
     		// minimum difference in area until stop backing
     		float t = 10;
+    		// minimum area to stop backing
+    		float t3 = 300;
     		if(al > ar)
     		{
-    			// move back rightwards
+    			backRight();
     			
     		}
     		else
     		{
-    			
+    			backLeft();
     			
     		}
-    		if(Math.abs(al - ar) < t)
+    		if(Math.abs(al - ar) < t || al + ar < t3)
     		{
     			back = false;
-    		}
-    	
+    		}	
     	}
     	
     	else
@@ -77,10 +76,17 @@ public class MoveToTape extends Command {
     		}
     		// difference in area to execute backing
     		else if (Math.abs(al - ar) > t2){
-    			back = true;
-        	
+    			back = true;    	
     		}
     	}
+    }
+    protected void backLeft()
+    {
+    	Robot.drivetrain.drive(-0.3, -0.4);
+    }
+    protected void backRight()
+    {
+    	Robot.drivetrain.drive(-0.4, -0.3);
     }
 
     // Make this return true when this Command no longer needs to run execute()
