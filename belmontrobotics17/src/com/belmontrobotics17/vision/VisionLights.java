@@ -10,6 +10,7 @@ public class VisionLights extends VictorSP {
 	public VisionLights(int channel)
 	{
 		super(channel);
+		this.dis();
 	}
 	
 	public void en()

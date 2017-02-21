@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -65,6 +66,8 @@ public class Robot extends IterativeRobot {
 		
 		RobotPrefs.init();
 		
+		NetworkTable.getTable("vision").putBoolean("requestpoint", false);
+		
 		//dashtable = NetworkTable.getTable("SmartDashboard");
 	}
 
@@ -98,6 +101,8 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		autonomousCommand = chooser.getSelected();
 
+		NetworkTable.getTable("vision").putBoolean("requestpoint", false);
+		
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -124,6 +129,9 @@ public class Robot extends IterativeRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
+		
+		NetworkTable.getTable("vision").putBoolean("requestpoint", false);
+		
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 	}

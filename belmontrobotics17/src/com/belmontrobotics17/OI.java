@@ -23,7 +23,7 @@ public class OI {
 	public OI()
 	{
 		this.gearToggleButton.whenReleased(new ToggleGearMechanism(400));
-		//this.visionTestButton.whenReleased(new VisionTest());
+		this.visionTestButton.whenReleased(new VisionTest());
 		this.directionToggleButton.whenReleased(new ToggleDrivetrainDirection());
 	}
 	
