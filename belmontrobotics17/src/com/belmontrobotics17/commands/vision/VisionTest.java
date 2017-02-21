@@ -3,6 +3,7 @@ package com.belmontrobotics17.commands.vision;
 import com.belmontrobotics17.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 /**
  *
@@ -16,7 +17,9 @@ public class VisionTest extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.vision.lights.dis();
+    	Robot.vision.lights.en();
+    	
+    	NetworkTable.getTable("vision").putBoolean("requestdistance", true);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -25,11 +28,14 @@ public class VisionTest extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return !NetworkTable.getTable("vision").getBoolean("requestdistance", true);
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	double distance = NetworkTable.getTable("vision").getNumber("distance", 0.0);
+    	
+    	Robot.vision.lights.dis();
     }
 
     // Called when another command which requires one or more of the same

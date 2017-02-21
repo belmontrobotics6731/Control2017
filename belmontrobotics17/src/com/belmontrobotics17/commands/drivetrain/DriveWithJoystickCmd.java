@@ -37,7 +37,7 @@ public class DriveWithJoystickCmd extends Command {
     	SmartDashboard.putNumber("Throttle", fb);
     	SmartDashboard.putNumber("Turn", lr);
     	
-    	//Robot.drivetrain.driveCheesy(fb, lr, fast, sens);
+    	Robot.drivetrain.driveCheesy(fb, lr, fast, sens);
     	
     	Robot.drivetrain.printEncodersToNetworkTables();
     	

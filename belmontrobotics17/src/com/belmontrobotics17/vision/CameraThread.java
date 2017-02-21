@@ -1,10 +1,13 @@
 package com.belmontrobotics17.vision;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvException;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfFloat4;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -14,6 +17,7 @@ import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class CameraThread extends Thread {
 	
@@ -38,34 +42,43 @@ public class CameraThread extends Thread {
 		//System.out.println("-------------------------------------------- DONE ---------------------------------------------");
 		
 		CvSink sink = server.getVideo();
-		CvSource outputStream = server.putVideo("Vision", this.width, this.height);
+		//CvSource outputStream = server.putVideo("Vision", this.width, this.height);
 		
 		Mat frame = new Mat();
+		Mat lineImage = new Mat();
 		//Mat outframe = new Mat();
+		
+		//LineSegmentDetector ls = Imgproc.createLineSegmentDetector();
 		
 		while(!Thread.interrupted())
 		{
 			sink.grabFrame(frame);
 
 		        try {
-		            LineSegmentDetector ls = Imgproc.createLineSegmentDetector();
-		            Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
-		     
-		            MatOfFloat4 lines = new MatOfFloat4();
+		            Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV_FULL);
+		            
+		            List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
-		            ls.detect(frame, lines);
+		            Mat hierarchy = new Mat();
+		            
+		            //Imgproc.findContours(frame, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+		            
+		            //ls.detect(frame, lines);
 
-
-		            Mat lineImage = null;
-		            frame.copyTo(lineImage);
+		            //frame.copyTo(lineImage);
 		            
 
-		            ls.drawSegments(lineImage, lines);
+		            //ls.drawSegments(lineImage, lines);
 
 
 		     //       outframe = cv2.lfdfjh(frame);
-					
-					outputStream.putFrame(lineImage);
+		            int i = 0;
+					for (MatOfPoint c: contours){
+						SmartDashboard.putNumber("Contour " + (i++), Imgproc.contourArea(c));
+					}
+		     
+		            
+					//outputStream.putFrame(frame);
 
 		        } catch (CvException e) {
 		         e.printStackTrace();

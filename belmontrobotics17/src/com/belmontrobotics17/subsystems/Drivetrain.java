@@ -29,6 +29,13 @@ public class Drivetrain extends Subsystem {
 	private Encoder leftDriveEncoder = new Encoder(RobotMap.LEFT_ENCODER_PORT1, RobotMap.LEFT_ENCODER_PORT2);
 	//private Encoder rightDriveEncoder = new Encoder(RobotMap.RIGHT_ENCODER_PORT1, RobotMap.RIGHT_ENCODER_PORT2);
 	
+	private boolean direction = true;
+	
+	public void toggleDirection()
+	{
+		this.direction = !this.direction;
+	}
+	
 	// In meters
 	public PIDController driveDistancePID = new PIDController(RobotConstants.DRIVE_PID_P, RobotConstants.DRIVE_PID_I, RobotConstants.DRIVE_PID_D, new DriveDistanceSource(), new DriveDistanceOutput());
 	
@@ -64,24 +71,28 @@ public class Drivetrain extends Subsystem {
 	
 	public void drive(double left, double right)
 	{
-		this.drive_motor0.set(left);
-		this.drive_motor1.set(left);
+		this.drive_motor0.set(-left);
+		this.drive_motor1.set(-left);
 		
-		this.drive_motor2.set(-right);
-		this.drive_motor3.set(-right);
+		this.drive_motor2.set(right);
+		this.drive_motor3.set(right);
 	}
 	
 	public void drivePID(double left, double right)
 	{
-		this.drive_motor0.pidWrite(left);
-		this.drive_motor1.pidWrite(left);
+		this.drive_motor0.pidWrite(-left);
+		this.drive_motor1.pidWrite(-left);
 		
-		this.drive_motor2.pidWrite(-right);
-		this.drive_motor3.pidWrite(-right);
+		this.drive_motor2.pidWrite(right);
+		this.drive_motor3.pidWrite(right);
 	}
 	
 	public void driveCheesy(double throttle, double rotation, boolean fasterTurn, double insens)
 	{
+		if(!this.direction) {
+			throttle = -throttle;
+		}
+		
 		double lDrive = throttle * RobotConstants.CHEESY_THROTTLE_SENS;
 		double rDrive = throttle * RobotConstants.CHEESY_THROTTLE_SENS;
 		
@@ -92,8 +103,8 @@ public class Drivetrain extends Subsystem {
 			sens = RobotConstants.CHEESY_ROTATION_SENS_FAST;
 		}
 		
-		lDrive += rotation * sens;
-		rDrive -= rotation * sens;
+		lDrive -= rotation * sens;
+		rDrive += rotation * sens;
 		
 		if(lDrive > 1.0) {
 			rDrive -= fturnConstant * (lDrive - 1.0);
@@ -114,6 +125,7 @@ public class Drivetrain extends Subsystem {
 		
 		//this.drive(insens,  insens);
 		this.drive(insens * lDrive, insens * rDrive);
+	
 	}
 	
 	public void stop()
@@ -152,7 +164,7 @@ public class Drivetrain extends Subsystem {
     	
     	@Override
     	public void pidWrite(double output) {
-    		drivePID(-output, -output);
+    		drivePID(output, output);
     	}
     }
     
@@ -179,7 +191,7 @@ public class Drivetrain extends Subsystem {
     	
     	@Override
     	public void pidWrite(double output) {
-    		drivePID(-output, output);
+    		drivePID(output, -output);
     	}
     }
 }
