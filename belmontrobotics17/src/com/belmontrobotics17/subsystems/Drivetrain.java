@@ -3,6 +3,8 @@ package com.belmontrobotics17.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -26,14 +28,31 @@ public class Drivetrain extends Subsystem {
 	private Spark drive_motor2 = new Spark(RobotMap.DRIVE2_PORT);
 	private Spark drive_motor3 = new Spark(RobotMap.DRIVE3_PORT);
 	
-	private Encoder leftDriveEncoder = new Encoder(RobotMap.LEFT_ENCODER_PORT1, RobotMap.LEFT_ENCODER_PORT2);
+	public ADXRS450_Gyro gyro;
+	
+	public Encoder leftDriveEncoder = new Encoder(RobotMap.LEFT_ENCODER_PORT1, RobotMap.LEFT_ENCODER_PORT2);
 	//private Encoder rightDriveEncoder = new Encoder(RobotMap.RIGHT_ENCODER_PORT1, RobotMap.RIGHT_ENCODER_PORT2);
 	
 	private boolean direction = true;
 	
+	// 3 settings - slow: 0.33, medium: 0.66, fast: 1
+	private double velMultiplier = 1.0;
+	
+	private double rightPIDFactor = 1.0;
+	private double startAnglePID;
+	
+	private double kCorr = 1.08;		//1.08;
+	
+	public double lastPIDOutput = 0.0;
+	
 	public void toggleDirection()
 	{
 		this.direction = !this.direction;
+	}
+	
+	public void setVelMultiplier(double vel)
+	{
+		this.velMultiplier = vel;
 	}
 	
 	// In meters
@@ -42,6 +61,12 @@ public class Drivetrain extends Subsystem {
 	// In radians
 	public PIDController turnAnglePID = new PIDController(RobotConstants.TURN_PID_P, RobotConstants.TURN_PID_I, RobotConstants.TURN_PID_D, new TurnAngleSource(), new TurnAngleOutput());
 	
+	public Drivetrain()
+	{
+		this.leftDriveEncoder.setDistancePerPulse(-1.19744869609*7.0742*6.0*0.0254*Math.PI/1440.0);
+		//this.rightDriveEncoder.setDistancePerPulse(6.0*0.0254*Math.PI/1440.0);
+	}
+	
 	// debug
 	public void printEncodersToNetworkTables()
 	{
@@ -49,10 +74,17 @@ public class Drivetrain extends Subsystem {
 		//SmartDashboard.putNumber("Right encoder", this.rightDriveEncoder.getDistance());
 	}
 	
-	public void driveDistancePID(double setPoint, double absoluteTolerance)
+	public void printGyroToNetworkTables()
+	{
+		SmartDashboard.putNumber("Gyro", this.gyro.getAngle());
+	}
+	
+	public void driveDistancePID(double setPoint, double rightFactor, double absoluteTolerance)
 	{
 		this.leftDriveEncoder.reset();
 		//this.rightDriveEncoder.reset();
+		this.rightPIDFactor = rightFactor;
+		this.startAnglePID = this.gyro.getAngle();
 		
 		this.driveDistancePID.setSetpoint(setPoint);
 		this.driveDistancePID.setAbsoluteTolerance(absoluteTolerance);
@@ -60,6 +92,11 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public void turnAnglePID(double setPoint, double absoluteTolerance)
+	{
+		this.turnToAnglePID(this.gyro.getAngle() + setPoint, absoluteTolerance);
+	}
+	
+	public void turnToAnglePID(double setPoint, double absoluteTolerance)
 	{
 		this.leftDriveEncoder.reset();
 		//this.rightEncoder.reset();
@@ -71,20 +108,26 @@ public class Drivetrain extends Subsystem {
 	
 	public void drive(double left, double right)
 	{
-		this.drive_motor0.set(-left);
-		this.drive_motor1.set(-left);
+		this.drive_motor0.set(-this.velMultiplier*left);
+		this.drive_motor1.set(-this.velMultiplier*left);
 		
-		this.drive_motor2.set(right);
-		this.drive_motor3.set(right);
+		this.drive_motor2.set(this.velMultiplier*right/this.kCorr);
+		this.drive_motor3.set(this.velMultiplier*right/this.kCorr);
+		
+		SmartDashboard.putNumber("Left", this.velMultiplier*left/this.kCorr);
+		SmartDashboard.putNumber("Right", this.velMultiplier*right);
 	}
 	
 	public void drivePID(double left, double right)
-	{
+	{		
 		this.drive_motor0.pidWrite(-left);
 		this.drive_motor1.pidWrite(-left);
 		
-		this.drive_motor2.pidWrite(right);
-		this.drive_motor3.pidWrite(right);
+		this.drive_motor2.pidWrite(right/this.kCorr);
+		this.drive_motor3.pidWrite(right/this.kCorr);
+		
+		SmartDashboard.putNumber("Left", left/this.kCorr);
+		SmartDashboard.putNumber("Right", right);
 	}
 	
 	public void driveCheesy(double throttle, double rotation, boolean fasterTurn, double insens)
@@ -130,6 +173,10 @@ public class Drivetrain extends Subsystem {
 	
 	public void stop()
 	{
+		this.drive_motor0.stopMotor();
+		this.drive_motor1.stopMotor();
+		this.drive_motor2.stopMotor();
+		this.drive_motor3.stopMotor();
 		this.drive(0.0, 0.0);
 	}
 	
@@ -142,7 +189,7 @@ public class Drivetrain extends Subsystem {
     	setDefaultCommand(new DriveWithJoystickCmd());
     }
     
-    private class DriveDistanceSource implements PIDSource {
+    public class DriveDistanceSource implements PIDSource {
     	
     	@Override
     	public PIDSourceType getPIDSourceType()
@@ -156,6 +203,7 @@ public class Drivetrain extends Subsystem {
     	@Override
     	public double pidGet()
     	{
+    		printEncodersToNetworkTables();
     		return leftDriveEncoder.getDistance();
     	}
     }
@@ -164,7 +212,23 @@ public class Drivetrain extends Subsystem {
     	
     	@Override
     	public void pidWrite(double output) {
-    		drivePID(output, output);
+    		//drivePID(-output, -rightPIDFactor*output);
+    		double d = RobotConstants.DRIVE_ADJUST_ANGLE_K * (gyro.getAngle() - startAnglePID);
+    		
+    		if(output > RobotConstants.MAX_PID_MVEL)
+    			output = RobotConstants.MAX_PID_MVEL;
+    		else if(output < -RobotConstants.MAX_PID_MVEL)
+    			output = -RobotConstants.MAX_PID_MVEL;
+
+    		
+    		lastPIDOutput = output;
+    		
+    		//drivePID(-output, -output);
+    		
+    		//if(output < 0.0)
+    			drivePID(-output + d, -output - d);
+    		//else
+    			//drivePID(-output + d, -output - d);
     	}
     }
     
@@ -183,7 +247,7 @@ public class Drivetrain extends Subsystem {
     	public double pidGet()
     	{
     		// Returns angle in radians that has been turned through
-    		return (leftDriveEncoder.getDistance() / RobotConstants.WHEEL_RADIUS);
+    		return (gyro.getAngle());
     	}
     }
     
@@ -191,7 +255,14 @@ public class Drivetrain extends Subsystem {
     	
     	@Override
     	public void pidWrite(double output) {
-    		drivePID(output, -output);
+    		
+    		if(output > RobotConstants.MAX_TURN_PID_MVEL)
+    			output = RobotConstants.MAX_TURN_PID_MVEL;
+    		else if(output < -RobotConstants.MAX_TURN_PID_MVEL)
+    			output = -RobotConstants.MAX_TURN_PID_MVEL;
+    		
+    		lastPIDOutput = output;
+    		drivePID(-output, output);
     	}
     }
 }

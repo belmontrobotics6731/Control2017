@@ -1,15 +1,17 @@
-package com.belmontrobotics17.commands;
-
-import edu.wpi.first.wpilibj.command.CommandGroup;
+package com.belmontrobotics17.commands.auto;
 
 import com.belmontrobotics17.commands.drivetrain.DriveDistanceCmd;
+import com.belmontrobotics17.commands.drivetrain.DriveSafe;
+import com.belmontrobotics17.commands.drivetrain.TurnAngleCmd;
+
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
  *
  */
-public class Auto extends CommandGroup {
+public class CenterAuto extends CommandGroup {
 
-    public Auto() {
+    public CenterAuto() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -27,6 +29,13 @@ public class Auto extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
     	
-    	addSequential(new DriveDistanceCmd(1000.0));
+    	//addSequential(new DriveDistanceCmd(0.5, 1.0));
+    	//addSequential(new TurnAngleCmd(0.5*Math.PI));
+    	//addSequential(new DriveDistanceCmd(1.0, 1.0));
+    	//addSequential(new TurnAngleCmd(-0.5*Math.PI));
+    	//addSequential(new DriveDistanceCmd(0.5, 1.0));
+    	
+    	//addSequential(new DriveSafe(0.3, 0.3, 1000));
+    	addSequential(new DriveDistanceCmd(3.0, 5000));
     }
 }

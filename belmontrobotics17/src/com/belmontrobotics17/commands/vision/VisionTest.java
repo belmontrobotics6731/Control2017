@@ -19,8 +19,8 @@ public class VisionTest extends Command {
     protected void initialize() {
     	Robot.vision.lights.en();
     	
-    	NetworkTable.getTable("vision").putBoolean("requestpoint", true);
-    	System.out.println("Called");
+    	//NetworkTable.getTable("vision").putBoolean("requestpoint", true);
+    	//System.out.println("Called");
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -29,8 +29,8 @@ public class VisionTest extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return !NetworkTable.getTable("vision").getBoolean("requestpoint", true);
-    	//return true;
+        //return !NetworkTable.getTable("vision").getBoolean("requestpoint", true);
+    	return true;
     }
 
     // Called once after isFinished returns true

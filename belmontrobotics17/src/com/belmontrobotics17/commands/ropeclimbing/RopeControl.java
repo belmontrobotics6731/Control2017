@@ -23,14 +23,10 @@ public class RopeControl extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double m = 0.0;
-    	
-    	if(Robot.oi.getLogitechButton(RobotMap.JOYSTICK_LIFT_PORT1))
-    		m += 1.0;
-    	if(Robot.oi.getLogitechButton(RobotMap.JOYSTICK_LIFT_PORT2))
-    		m -= 1.0;
-    	
-    	Robot.ropeClimbing.moveLift(m);
+    	if(Robot.oi.getLogitechButton(RobotMap.JOYSTICK_LIFT_PORT))
+    		Robot.ropeClimbing.moveLift(-1.0);
+    	else
+    		Robot.ropeClimbing.stop();
     }
 
     // Make this return true when this Command no longer needs to run execute()

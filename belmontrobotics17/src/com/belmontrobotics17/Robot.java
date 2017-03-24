@@ -2,9 +2,12 @@
 package com.belmontrobotics17;
 
 import edu.wpi.cscore.UsbCamera;
-
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -12,12 +15,12 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.belmontrobotics17.commands.auto.*;
 import com.belmontrobotics17.subsystems.Drivetrain;
 import com.belmontrobotics17.subsystems.GearMechanism;
 import com.belmontrobotics17.subsystems.RopeClimbing;
 import com.belmontrobotics17.subsystems.Vision;
 import com.belmontrobotics17.vision.CameraThread;
-import com.belmontrobotics17.commands.Auto;
 
 /*import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
@@ -57,16 +60,20 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-
-		vision.initCameraStream(1280, 720);
 		
-		chooser.addDefault("Default Auto", new Auto());
-		// chooser.addObject("My Auto", new MyAutoCommand());
+		drivetrain.gyro = new ADXRS450_Gyro();
+
+		//vision.initCameraStream(360, 270, 20);
+		
+		chooser.addDefault("Test Auto", new SidesAuto(-57 * 0.0254));
+		chooser.addObject("Empty Auto", new EmptyAuto());
+		chooser.addObject("Sides Auto", new SidesAuto(-60.0 * 0.0254));
+		//chooser.addObject("Center Auto", new CenterAuto());
 		SmartDashboard.putData("Auto mode", chooser);
 		
 		RobotPrefs.init();
 		
-		NetworkTable.getTable("vision").putBoolean("requestpoint", false);
+		//NetworkTable.getTable("vision").putBoolean("requestpoint", false);
 		
 		//dashtable = NetworkTable.getTable("SmartDashboard");
 	}
@@ -101,7 +108,11 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		autonomousCommand = chooser.getSelected();
 
-		NetworkTable.getTable("vision").putBoolean("requestpoint", false);
+		//drivetrain.gyro.calibrate();
+		drivetrain.gyro.reset();
+		RobotPrefs.update();
+		
+		//NetworkTable.getTable("vision").putBoolean("requestpoint", false);
 		
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -130,7 +141,10 @@ public class Robot extends IterativeRobot {
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
 		
-		NetworkTable.getTable("vision").putBoolean("requestpoint", false);
+		drivetrain.gyro.reset();
+		RobotPrefs.update();
+		
+		//NetworkTable.getTable("vision").putBoolean("requestpoint", false);
 		
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();

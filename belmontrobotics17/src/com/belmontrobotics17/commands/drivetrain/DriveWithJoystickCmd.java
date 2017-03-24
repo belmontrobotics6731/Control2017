@@ -1,6 +1,7 @@
 package com.belmontrobotics17.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.belmontrobotics17.RobotMap;
@@ -34,12 +35,15 @@ public class DriveWithJoystickCmd extends Command {
     	if(Robot.oi.getLogitechButton(RobotMap.JOYSTICK_NOTURN_BUTTON))
     		lr = 0.0;
     	
-    	SmartDashboard.putNumber("Throttle", fb);
-    	SmartDashboard.putNumber("Turn", lr);
+    	//SmartDashboard.putNumber("Throttle", fb);
+    	//SmartDashboard.putNumber("Turn", lr);
     	
     	Robot.drivetrain.driveCheesy(fb, lr, fast, sens);
     	
+    	Robot.drivetrain.printGyroToNetworkTables();
     	Robot.drivetrain.printEncodersToNetworkTables();
+    	
+    	System.out.println(NetworkTable.getTable("vision").getNumber("offset", 0.01));
     	
     	//Robot.ntable.putNumber("Throttle", fb);
     	//Robot.ntable.putNumber("Turn", lr);

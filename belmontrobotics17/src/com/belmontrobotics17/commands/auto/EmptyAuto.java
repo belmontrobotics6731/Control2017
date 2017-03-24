@@ -1,13 +1,13 @@
-package com.belmontrobotics17.commands;
+package com.belmontrobotics17.commands.auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
  *
  */
-public class GearAuto extends CommandGroup {
+public class EmptyAuto extends CommandGroup {
 
-    public GearAuto() {
+    public EmptyAuto() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

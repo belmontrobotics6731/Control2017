@@ -23,43 +23,61 @@ public class CameraThread extends Thread {
 	
 	private int width;
 	private int height;
+	private int FPS;
 	
 	public Mat lastFrame = new Mat();
-	
-	public CameraThread(int w, int h)
+		public CameraThread(int w, int h, int fps)
 	{
 		this.width = w;
 		this.height = h;
+		this.FPS = fps;
 	}
 	
 	public void run()
 	{
 		CameraServer server = CameraServer.getInstance();
 		
-		UsbCamera camera = server.startAutomaticCapture();
-		camera.setResolution(this.width, this.height);
+		//UsbCamera frontcamera = server.startAutomaticCapture(0);
+		//frontcamera.setResolution(this.width, this.height);
+		//frontcamera.setFPS(this.FPS);
+		
+		UsbCamera climbcamera = server.startAutomaticCapture(1);
+		climbcamera.setResolution(this.width, this.height);
+		climbcamera.setFPS(this.FPS);
 		
 		//System.out.println("-------------------------------------------- DONE ---------------------------------------------");
 		
-		CvSink sink = server.getVideo();
-		//CvSource outputStream = server.putVideo("Vision", this.width, this.height);
+		//CvSink frontsink = server.getVideo(frontcamera);
+		//CvSink climbsink = server.getVideo(climbcamera);
 		
-		Mat frame = new Mat();
-		Mat lineImage = new Mat();
+		//CvSource frontstream = server.putVideo("Front", this.width, this.height);
+		//CvSource climbstream = server.putVideo("Climb", this.width, this.height);
+		
+		//Mat frame = new Mat();
+		//Mat lineImage = new Mat();
 		//Mat outframe = new Mat();
 		
 		//LineSegmentDetector ls = Imgproc.createLineSegmentDetector();
 		
 		while(!Thread.interrupted())
 		{
-			sink.grabFrame(frame);
-
-		        try {
-		            Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV_FULL);
+			/*try{
+				frontsink.grabFrame(frame);
+				
+				if(frame.size().height == this.height && frame.size().width == this.width)
+					frontstream.putFrame(frame);
+				
+				climbsink.grabFrame(frame);
+				
+				if(frame.size().height == this.height && frame.size().width == this.width)
+					climbstream.putFrame(frame);
+				
+		        //try {
+		         //   Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV_FULL);
 		            
-		            List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+		           // List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
-		            Mat hierarchy = new Mat();
+		           // Mat hierarchy = new Mat();
 		            
 		            //Imgproc.findContours(frame, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 		            
@@ -72,25 +90,22 @@ public class CameraThread extends Thread {
 
 
 		     //       outframe = cv2.lfdfjh(frame);
-		            int i = 0;
-					for (MatOfPoint c: contours){
-						SmartDashboard.putNumber("Contour " + (i++), Imgproc.contourArea(c));
-					}
-		     
-		            
-					//outputStream.putFrame(frame);
+		            //int i = 0;
+		//			for (MatOfPoint c: contours){
+			//			SmartDashboard.putNumber("Contour " + (i++), Imgproc.contourArea(c));
+				//	}
 
-		        } catch (CvException e) {
-		         e.printStackTrace();
-		        }
+		    	} catch (Exception e) {
+		    		e.printStackTrace();
+		    	}
 
 		    }
 			
 			
 			
 			
-			this.lastFrame = frame;
+			this.lastFrame = frame;*/
 		}
 	}
-
+}
 	

@@ -25,5 +25,11 @@ public class RopeClimbing extends Subsystem {
     {
     	this.lift_motor.set(v);
     }
+    
+    public void stop()
+    {
+    	this.lift_motor.stopMotor();
+    	this.lift_motor.set(0.0);
+    }
 }
 

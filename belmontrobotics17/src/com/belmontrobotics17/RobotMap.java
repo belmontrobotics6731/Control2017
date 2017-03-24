@@ -21,6 +21,8 @@ public class RobotMap {
 	
 	public static int LIGHTS_PORT = 5;
 	
+	public static int GYRO_PORT = 0;
+	
 	// DIGITAL ports
 	public static int LEFT_ENCODER_PORT1 = 0;
 	public static int LEFT_ENCODER_PORT2 = 1;
@@ -31,12 +33,16 @@ public class RobotMap {
 	public static int LOGITECH_PORT = 0;
 	public static int JOYSTICK_FB_PORT = 1;
 	public static int JOYSTICK_LR_PORT = 2;
-	public static int JOYSTICK_LIFT_PORT1 = 9;
-	public static int JOYSTICK_LIFT_PORT2 = 10;
+	public static int JOYSTICK_LIFT_PORT = 10;
 	public static int JOYSTICK_SENS_PORT = 3;
 	public static int JOYSTICK_FASTTURN_BUTTON = 2;
 	public static int JOYSTICK_GEAR_TOGGLE_BUTTON = 3;
 	public static int JOYSTICK_VISION_TEST_BUTTON = 6;
 	public static int JOYSTICK_DIRECTION_TOGGLE_BUTTON = 5;
 	public static int JOYSTICK_NOTURN_BUTTON = 1;
+	public static int JOYSTICK_SLOW_BUTTON = 11;
+	public static int JOYSTICK_MEDIUM_BUTTON = 9;
+	public static int JOYSTICK_FAST_BUTTON = 7;
+	public static int JOYSTICK_BRAKE_BUTTON = 4;
+	public static int JOYSTICK_180_BUTTON = 12;
 }
